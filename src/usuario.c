@@ -1,10 +1,10 @@
 #include "usuario.h"
 
-char *LlenarTabla(TABLE_HASH *TH, char *usersArch){
+void LlenarTabla(TABLE_HASH *TH, char *usersArch){
     if (TH==NULL)
     {
         printf("Tabla vacia\n");
-        return NULL;
+        return ;
     }
     
     
@@ -20,6 +20,7 @@ char *LlenarTabla(TABLE_HASH *TH, char *usersArch){
     
     char nuevoarch[50];
     snprintf(nuevoarch,50,"usuarios_hashed_%d.csv",(largo-1));
+    strcpy(TH->respaldo,nuevoarch);
 
     FILE *respaldo=fopen(nuevoarch,"w");
 
@@ -27,8 +28,6 @@ char *LlenarTabla(TABLE_HASH *TH, char *usersArch){
     char buff[256];
     
     fgets(buff,sizeof(buff),arch);
-
-    //fprintf(respaldo, "#username;password_hash;salt\n");
     
     
     while (fgets(buff,sizeof(buff),arch)!=NULL){
@@ -57,7 +56,7 @@ char *LlenarTabla(TABLE_HASH *TH, char *usersArch){
     fclose(respaldo);
     fclose(arch);
 
-    return nuevoarch;
+    return ;
 }
 
 char *generarSalt(){
@@ -77,7 +76,7 @@ char *generarSalt(){
 }
 
 
-char *Registrar(TABLE_HASH *TH,char *archrespaldo){
+void Registrar(TABLE_HASH *TH,char *archrespaldo){
     char nombre[102];
     char pass[102];
     printf("Ingrese Nombre de Usuario (maximo 99 caracteres): ");
@@ -104,34 +103,68 @@ char *Registrar(TABLE_HASH *TH,char *archrespaldo){
     int cantact=LargoArchivo(archrespaldo);
     sprintf(buff,"usuarios_hashed_%d.csv",cantact-1);
     rename(archrespaldo,buff);
-
-    return buff;
+    strcpy(TH->respaldo,buff);
 }
 
 
 
-Usuario *login(TABLE_HASH *TH, char *nombre,char *pass_hash,char *salt){
-    unsigned int hash=h(key(pass_hash),TH->capacidad);
-    int retorno;
+Usuario *login(TABLE_HASH *TH, char *nombre,char *pass,char *arch){
+    FILE *respaldo=fopen(arch,"r");
     
+    if(respaldo==NULL)  return NULL;
+    int index=buscarNomb(TH,nombre);
     
-    
-    for (int i = 0; i < TH->capacidad; i++){
-        
-        if(i=0){
-            retorno=hash;
-        }else{
-            retorno=(hash+(i*i))%TH->capacidad;
-        }
-        
-        if (strcmp(TH->tabla[i].cabeza->nombre,nombre)==0 && strcmp(TH->tabla[i].cabeza->pass,pass_hash+4)==0 && strcmp(TH->tabla[i].cabeza->salt,salt)==0){
-            
-            return retorno;
+    char *salt;
 
-        }else if (TH->tabla[i].cabeza->sgte!=NULL){
-            
+    char buff[256];
+    
+    fgets(buff,sizeof(buff),respaldo);
+    
+    
+    while (fgets(buff,sizeof(buff),respaldo)!=NULL){
+
+
+        if (buff[0]=='\0'||buff[0]=='\n'){
+
+        }else{
+        
+            strtok(buff,";");
+            strtok(NULL,";");
+            salt=strtok(NULL,";");
+            salt[strcspn(salt, "\n")] = '\0';            
+
+            if (strcmp(TH->tabla[index].cabeza->nombre,nombre)==0){        
+                if (strcmp(salt,TH->tabla[index].cabeza->salt)==0){
+                    char *concat=concatenar(salt,pass);
+
+                    if(strcmp(TH->tabla[index].cabeza->pass,concat)==0){
+                        free(concat);
+                        return TH->tabla[index].cabeza;
+                    }else{
+                        free(concat);
+                        printf("Usuario o contraseña incorrecta\n");
+                        return NULL;
+                    }
+                }
+                
+            }else if(strcmp(TH->tabla[index].cabeza->sgte->nombre,nombre)==0){
+                if (strcmp(salt,TH->tabla[index].cabeza->sgte->salt)==0){
+                    char *concat=concatenar(salt,pass);
+
+                    if(strcmp(TH->tabla[index].cabeza->sgte->pass,concat)==0){
+                        free(concat);
+                        return TH->tabla[index].cabeza;
+                    }else{
+                        free(concat);
+                        printf("Usuario o contraseña incorrecta\n");
+                        return NULL;
+                    }
+                }
+            }
         }
-            
     }
+    
+    printf("usuario no encontrado\n");
+    fclose(respaldo);
     return NULL;
 }

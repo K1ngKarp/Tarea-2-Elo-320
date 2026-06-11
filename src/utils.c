@@ -65,7 +65,7 @@ int intmax(int primero,int segundo){
 int ordenalf(char *primer,char *segundo){
     if (strlen(primer)!=strlen(segundo)) return (strlen(primer)<strlen(segundo))? -1: 1;
     
-    for (int i = 0; i < strlen(primer); i++){
+    for (long unsigned int i = 0; i < strlen(primer); i++){
         if (primer[i]!=segundo[i]) return (primer[i]<segundo[i]) ? -1:1;
         
     }

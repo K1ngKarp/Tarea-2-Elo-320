@@ -37,15 +37,23 @@ unsigned int key(char *llave){
 }
 
 unsigned int h(char *llave,int tamanoTH){
+    
     int clave=key(llave);
+
     return clave%tamanoTH;
 
 }
 
-unsigned int SlotLibre(TABLE_HASH *TH ,int indx){
+int SlotLibre(TABLE_HASH *TH ,int indx){
     int retorno; 
-    for (int i = 1; i < TH->capacidad; i++)
+    for (unsigned int i = 1; i < TH->capacidad; i++)
     {
+        if (i==0){
+            retorno=indx;
+            if (TH->tabla[retorno].cont<2)  return retorno;
+            
+        }
+        
         retorno=(indx+(i*i))%TH->capacidad;
 
         if (TH->tabla[retorno].cont<2){
@@ -68,19 +76,15 @@ void insertarTH(TABLE_HASH *TH, char *nombre,char *pass, char *salt){
     if (user==NULL)
     return;
     
+    char *conct=concatenar(salt,pass);
     strcpy(user->nombre,nombre);
-    strcpy(user->pass,pass);
+    strcpy(user->pass,conct);
     strcpy(user->salt,salt);
     user->sgte=NULL;
 
+    unsigned int idx = h(nombre,TH->capacidad);
+
     
-
-    char *conct=concatenar(salt,pass);
-    unsigned int llave=key(conct);
-
-    unsigned int idx = h(llave,TH);
-
-    free(conct);
 
     switch (TH->tabla[idx].cont){
 
@@ -111,7 +115,7 @@ void insertarTH(TABLE_HASH *TH, char *nombre,char *pass, char *salt){
         break;
         }
     }
-
+    free(conct);
     TH->cantidadUsers++;
 }
 
@@ -178,44 +182,28 @@ void imprimirTH(TABLE_HASH *TH){
     
 }
 
-/*
-void imprimirColision(TABLE_HASH *TH, int LARGE_KEY){
-    if (TH==NULL)
-    {
-        printf("Tabla vacia\n");
-        return;
-    }
-    int contador=0;
-    int mas3=0;
-    int mas4=0;
-    int mas5=0;
-    for (int i = 0; i < LARGE_KEY; i++)
-    {
-        if (TH->tabla[i].cont >2)
-        {
-            printf("hay -> %d <- nodos en el slot -> %d <- \n", TH->tabla[i].cont,(i+1));
-            printf("\n");
-            contador+=TH->tabla[i].cont-2;
-            switch (TH->tabla[i].cont)
-            {
-            case 3:
-                mas3++;
-                break;
-            
-            case 4:
-                mas4++;
-                break;
-            }
+unsigned int buscarNomb(TABLE_HASH *TH,char *nombre){
+    
+    unsigned int idx = h(nombre,TH->capacidad);
+    unsigned int retorno;
 
-            if (TH->tabla[i].cont >4)
-            mas5++;
+    for (unsigned int i = 0; i < TH->capacidad; i++)
+    {
+        if (i==0){
+            retorno=idx;
+
+            if (strcmp(TH->tabla[retorno].cabeza->nombre,nombre)==0)        return retorno;
             
-        }
+            if(strcmp(TH->tabla[retorno].cabeza->sgte->nombre,nombre)==0)   return retorno;
+        }else{
         
+            retorno=(idx+(i*i))%TH->capacidad;
+
+            if (strcmp(TH->tabla[retorno].cabeza->nombre,nombre)==0)        return retorno;
+            if (strcmp(TH->tabla[retorno].cabeza->sgte->nombre,nombre)==0)  return retorno;
+
+        }
     }
-    printf("cantidad de colisiones %d \n",contador);
-    printf("hay %d con 3 nodos\n", mas3);
-    printf("hay %d con 4 nodos\n", mas4);
-    printf("hay %d con 5 o mas nodos\n", mas5);
+    return TH->capacidad+1;
 }
-*/
+

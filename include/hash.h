@@ -26,14 +26,17 @@ typedef struct{
     slot *tabla;
     unsigned int capacidad; 
     unsigned int cantidadUsers;
+    char respaldo[256];
 }TABLE_HASH;
 //
 
 TABLE_HASH *crear(int tamano);
 
-unsigned int h(int key,int tamanoTH);
+unsigned int key(char *llave);
 
-unsigned int SlotLibre(TABLE_HASH *TH,int indx);
+unsigned int h(char *key,int tamanoTH);
+
+int SlotLibre(TABLE_HASH *TH,int indx);
 
 void insertarTH(TABLE_HASH *TH, char *nombre,char *pass, char *salt);
 
@@ -41,6 +44,6 @@ void LiberarTabla(TABLE_HASH *TH);
 
 void imprimirTH(TABLE_HASH *TH);
 
-// void imprimirColision(TABLE_HASH *TH);
+unsigned int buscarNomb(TABLE_HASH *TH,char *nombre);
 
 #endif

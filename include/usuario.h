@@ -4,11 +4,12 @@
 #include "hash.h"
 #include "utils.h"
 
-char *LlenarTabla(TABLE_HASH *TH, char *usersArch);
+void LlenarTabla(TABLE_HASH *TH, char *usersArch);
 
 char *generarSalt();
 
-char *Registrar(TABLE_HASH *TH,char *archrespaldo);
+void Registrar(TABLE_HASH *TH,char *archrespaldo);
 
+Usuario *login(TABLE_HASH *TH, char *nombre,char *pass,char *arch);
 
 #endif

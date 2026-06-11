@@ -1,13 +1,20 @@
-#include "avl.c"
+#include "hash.h"
+#include "usuario.h"
+#include "avl.h"
+#include "utils.h"
 
-int main(){
-
-    char *f="data/catalogo_100.csv";
+int main(int argc, char *argv[]){
+    if (argc!=4){
+        printf("Formato incorrecto.\n");
+        printf("Formato ideal:\n");
+        printf("./vibenodes -lista -user data/\n") ;
+        printf("./vibenodes -matriz -admin data/ \n");
+        return 1;
+    }
     
-    Artistas *raiz=llenarArb(f);
+    char *estructura=argv[1];
+    char *modo      =argv[2];
+    char *data      =argv[3];
 
-    iprimirAVL(raiz);
-    BorrarAVL(raiz);
-    
     return 0;
 }
