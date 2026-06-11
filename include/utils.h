@@ -10,8 +10,9 @@ char *concatenar(char *char1, char *char2);
 
 int LargoArchivo(char *archlec);
 int esprimo(int numero);
-int primoMayor(int numero);
+int PrimoMayorQue(int numero);
 int intmax(int primero,int segundo);
 int ordenalf(char *primer,char *segundo);
+
 
 #endif

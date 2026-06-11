@@ -36,21 +36,20 @@ int esprimo(int numero){
     if(numero<4) return 1;
     if(numero%2==0) return 0;
     
-    int raiz=(int)sqrt((double)numero);
-    for(int i=3;i< raiz+1;i+=2){
-        if(numero%i==0) return 0;
+    for (int i = 2; i <= sqrt(numero); i++){
+        if (numero % i == 0) return 0; // No es primo
     }
     return 1;
 }
 
-int primoMayor(int numero){
-    int siguiente=numero+1;
-    while (esprimo(siguiente)){
-        siguiente++;
+int PrimoMayorQue(int numero) {
+    int candidato = numero + 1;
+    while (1) {
+        if (esPrimo(candidato)) {
+            return candidato;
+        }
+        candidato++;
     }
-    
-    return siguiente;
-    
 }
 
 int intmax(int primero,int segundo){
@@ -71,3 +70,4 @@ int ordenalf(char *primer,char *segundo){
     }
     return 0;
 }
+
