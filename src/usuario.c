@@ -76,15 +76,7 @@ char *generarSalt(){
 }
 
 
-void Registrar(TABLE_HASH *TH,char *archrespaldo){
-    char nombre[102];
-    char pass[102];
-    printf("Ingrese Nombre de Usuario (maximo 99 caracteres): ");
-    scanf("%s",nombre);
-
-    printf("Ingrese Contraseña (maximo 99 caracteres): ");
-    scanf("%s",pass);
-
+void Registrar(TABLE_HASH *TH,char *archrespaldo,char *nombre,char *pass){
     char *salt=generarSalt();
 
     insertarTH(TH,nombre,pass,salt);
@@ -168,3 +160,4 @@ Usuario *login(TABLE_HASH *TH, char *nombre,char *pass,char *arch){
     fclose(respaldo);
     return NULL;
 }
+

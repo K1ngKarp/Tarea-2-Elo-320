@@ -37,7 +37,7 @@ int esprimo(int numero){
     if(numero%2==0) return 0;
     
     for (int i = 2; i <= sqrt(numero); i++){
-        if (numero % i == 0) return 0; // No es primo
+        if (numero % i == 0) return 0;
     }
     return 1;
 }
@@ -45,7 +45,7 @@ int esprimo(int numero){
 int PrimoMayorQue(int numero) {
     int candidato = numero + 1;
     while (1) {
-        if (esPrimo(candidato)) {
+        if (esprimo(candidato)!=0) {
             return candidato;
         }
         candidato++;

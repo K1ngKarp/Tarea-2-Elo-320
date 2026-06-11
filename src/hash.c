@@ -126,7 +126,7 @@ void LiberarTabla(TABLE_HASH *TH){
 
     Usuario *indice;
     Usuario *ant;
-    for (int i = 0; i < LARGE_KEY; i++){
+    for (int i = 0; i < TH->capacidad; i++){
 
         indice=TH->tabla[i].cabeza;
             
@@ -155,7 +155,7 @@ void imprimirTH(TABLE_HASH *TH){
         return;
     }
     Usuario *rec;
-    for (int i = 0; i < LARGE_KEY; i++)
+    for (int i = 0; i < TH->capacidad; i++)
     {
         if(TH->tabla[i].cabeza==NULL){
            // printf("slot %d vacio\n",(i+1));
@@ -183,7 +183,7 @@ void imprimirTH(TABLE_HASH *TH){
 }
 
 unsigned int buscarNomb(TABLE_HASH *TH,char *nombre){
-    
+
     unsigned int idx = h(nombre,TH->capacidad);
     unsigned int retorno;
 
