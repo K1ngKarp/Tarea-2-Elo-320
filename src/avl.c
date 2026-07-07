@@ -1,4 +1,9 @@
 #include "avl.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <math.h>
 
 int altura(NodoArb *arbol){ //sacado de chatGPT
     if(arbol==NULL) return 0;
@@ -57,10 +62,10 @@ NodoArb *RotarIz(NodoArb *raiz)
     return Der;
 }
 
-NodoArb *crearAVL(void){
+NodoArb *crearNodoAVL(Artista *art){
     
     NodoArb* arbol = (NodoArb*)malloc(sizeof(NodoArb));
-    arbol->artista=NULL;
+    arbol->artista=art;
     arbol->derecha = NULL;
     arbol->izquierda = NULL;
     arbol->altura = 0;
@@ -119,14 +124,11 @@ void insertCancion(Disco *disc, Song *cancion) {
     
     disc->canciones=cancion;
     cancion->anterior=NULL;
-
-    strncpy(cancion->album_name,disc->nombre_disco,254);
-    cancion->album_name[255]='\0';
     
 }
 
 Song *BuscarCancion(Disco *disc, char *cancion){
-    if(disc==NULL) return;
+    if(disc==NULL) return NULL;
     Song *actual=disc->canciones;
 
     while (actual!=NULL)
@@ -245,16 +247,18 @@ Artista *BuscarArtista(NodoArb *raiz, char *artista){
 }
 
 NodoArb*InsertArtista(NodoArb *raiz, Artista *artista){
-    if (raiz == NULL)   return crearNodoArb(artista);
+    if (raiz == NULL){
+        crearNodoAVL(artista);
+    }   
     int orden=ordenalf(artista->nombre, raiz->artista->nombre);
 
     if (orden < 0)
     {
-        raiz->izquierda = insertar(raiz->izquierda, artista);
+        raiz->izquierda = InsertArtista(raiz->izquierda, artista);
     }
     else if (orden > 0)
     {
-        raiz->derecha = insertar(raiz->derecha, artista);
+        raiz->derecha = InsertArtista(raiz->derecha, artista);
     }
     else
     {
@@ -268,27 +272,27 @@ NodoArb*InsertArtista(NodoArb *raiz, Artista *artista){
     // rotación izquierda izquierda
     if (balance > 1 && strcmp(artista->nombre, raiz->izquierda->artista->nombre) < 0)
     {
-        return rotacionDerecha(raiz);
+        return RotarDer(raiz);
     }
 
     // rotación derecha derecha
     if (balance < -1 && strcmp(artista->nombre, raiz->derecha->artista->nombre) > 0)
     {
-        return rotacionIzquierda(raiz);
+        return RotarIz(raiz);
     }
 
     // rtación izquierda derecha
     if (balance > 1 && strcmp(artista->nombre, raiz->izquierda->artista->nombre) > 0)
     {
-        raiz->izquierda = rotacionIzquierda(raiz->izquierda);
-        return rotacionDerecha(raiz);
+        raiz->izquierda = RotarIz(raiz->izquierda);
+        return RotarDer(raiz);
     }
 
     // rotación derecha izquierda
     if (balance < -1 && strcmp(artista->nombre, raiz->derecha->artista->nombre) < 0)
     {
-        raiz->derecha = rotacionDerecha(raiz->derecha);
-        return rotacionIzquierda(raiz);
+        raiz->derecha = RotarDer(raiz->derecha);
+        return RotarIz(raiz);
     }
 
     return raiz;
@@ -297,17 +301,17 @@ NodoArb*InsertArtista(NodoArb *raiz, Artista *artista){
 
 
 void BorrarArbol(NodoArb *raiz) {
-    if (raiz==NULL) return;
+    if (raiz==NULL)
+        return;
+    BorrarArbol(raiz->izquierda);
 
-    BorrarAVL(raiz->izquierda);
-
-    BorrarAVL(raiz->derecha);
+    BorrarArbol(raiz->derecha);
     
     Disco *disco = raiz->artista->discos;
     while (disco != NULL)
     {
         Disco *temp=disco;
-        disco->siguiente;
+        disco=disco->siguiente;
         BorrarDisco(temp);
     }
 
@@ -349,18 +353,166 @@ NodoArb *cargarDatos(const char *directorio)
             Artista *artista = BuscarArtista(raiz, nombreArtista);
             if (artista == NULL)
             {
-                artista = crearArtista(nombreArtista);
+                artista = CrearArtista(nombreArtista);
                 if (artista == NULL)
                     continue;
-                raiz = insertar(raiz, artista);
+                raiz = InsertArtista(raiz,artista);
             }
-
-            Song* nuevo=crearCancion( nombreCancion,Id, popularidad, duracion);
-             
-
+            Disco *disc=BuscarDisco(artista,nombreDisco);
+            Song *cancion= crearCancion(nombreCancion,Id,popularidad,duracion);
+            insertCancion(disc,cancion);
         }
     }
 
     fclose(archivo);
     return raiz;
+}
+
+int contarCanciones(NodoArb *raiz){
+    if(raiz==NULL) return 0;
+    int suma=0;
+    Disco *disc=raiz->artista->discos;
+    while (disc!=NULL){
+        Song *cancion=disc->canciones;
+        while (cancion!=NULL){
+            suma++;
+            cancion=cancion->siguiente;
+        }
+        disc=disc->siguiente;
+    }
+    return suma+contarCanciones(raiz->izquierda)+contarCanciones(raiz->derecha);
+}
+
+Song *CancionId(NodoArb *raiz, char *id){
+    if (raiz == NULL) return NULL;
+
+    
+    Disco *disco = raiz->artista->discos;
+    while (disco != NULL) {
+        Song *cancion = disco->canciones;
+        while (cancion != NULL) {
+            if (strcmp(cancion->Id, id) == 0)
+                return cancion;
+            cancion = cancion->siguiente;
+        }
+        disco = disco->siguiente;
+    }
+
+    
+    Song *iz = CancionId(raiz->izquierda, id);
+    if (iz != NULL) return iz;
+    return CancionId(raiz->derecha, id);
+}
+
+
+Song *seleccionarCancion(Artista *artista, int numDisco, int numCancion){
+
+    Disco *disco = artista->discos;
+    int i = 1;
+    while (disco != NULL && i < numDisco)
+    {
+        disco = disco->siguiente;
+        i++;
+    }
+
+    if (disco == NULL)
+    {
+        printf("Disco no encontrado.\n");
+        return NULL;
+    }
+
+    Song *cancion = disco->canciones;
+    int j = 1;
+    while (cancion != NULL && j < numCancion)
+    {
+        cancion = cancion->siguiente;
+        j++;
+    }
+
+    if (cancion == NULL)
+    {
+        printf("Cancion no encontrada.\n");
+        return NULL;
+    }
+
+    return cancion;
+}
+
+void ImprimirArtistas(NodoArb *raiz) {
+    if (raiz == NULL) return;
+
+    ImprimirArtistas(raiz->izquierda);
+    if (raiz->artista != NULL) {
+        printf("- %s\n", raiz->artista->nombre);
+    }
+    ImprimirArtistas(raiz->derecha);
+}
+
+
+void Catalogo(NodoArb *raiz){
+        printf("\n=== Catalogo de Artistas Disponibles ===\n");
+    if (raiz == NULL) {
+        printf("No hay catalogo.\n");
+    } else {
+        ImprimirArtistas(raiz);
+    }
+    printf("----------------------------\n");
+}
+int ObtenerReproducciones(NodoArb *raiz, const char *track_id)
+{
+    if (raiz == NULL) return 0;
+
+    Disco *disco = raiz->artista->discos;
+    while (disco != NULL) {
+        Song *cancion = disco->canciones;
+        while (cancion != NULL) {
+            if (strcmp(cancion->Id, track_id) == 0) {
+                if (cancion->reproducciones > 0)
+                return cancion->reproducciones;
+            }
+            cancion = cancion->siguiente;
+        }
+        disco = disco->siguiente;
+    }
+
+    int izq = ObtenerReproducciones(raiz->izquierda, track_id);
+    if (izq > 0) return izq;
+    return ObtenerReproducciones(raiz->derecha, track_id);
+}
+
+int ReproduccionesTotales(NodoArb *raiz) {
+    if (raiz == NULL) return 0;
+    int total = 0;
+    Disco *disco = raiz->artista->discos;
+    while (disco != NULL) {
+        Song *cancion = disco->canciones;
+        while (cancion != NULL) {
+            if (cancion->reproducciones > 0)
+        
+            total += cancion->reproducciones;
+            cancion = cancion->siguiente;
+        }
+        disco = disco->siguiente;
+    }
+    return total + ReproduccionesTotales(raiz->izquierda)+ ReproduccionesTotales(raiz->derecha);
+}
+
+void MaximaReproduccion(NodoArb *raiz, char *nom_out, char *art_out, int *max_out) {
+    if (raiz == NULL) return;
+
+    Disco *disco = raiz->artista->discos;
+    while (disco != NULL) {
+        Song *cancion = disco->canciones;
+        while (cancion != NULL) {
+            if (cancion->reproducciones > *max_out) {
+                *max_out = cancion->reproducciones;
+                strncpy(nom_out, cancion->cancion_name, 99);
+                strncpy(art_out, raiz->artista->nombre, 99);
+            }
+            cancion = cancion->siguiente;
+        }
+        disco = disco->siguiente;
+    }
+    MaximaReproduccion(raiz->izquierda, nom_out, art_out, max_out);
+    MaximaReproduccion(raiz->derecha,   nom_out, art_out, max_out);
 }

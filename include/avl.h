@@ -3,11 +3,15 @@
 #define AVL_H
 
 #include "utils.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <math.h>
 
 typedef struct Song
 {
     char cancion_name[256];
-    char album_name[256];
     int popularidad;
     int duracion_ms;
     char Id[256];
@@ -47,7 +51,7 @@ NodoArb *RotarDer(NodoArb *y);
 NodoArb *RotarIz(NodoArb *x);
 
 
-NodoArb *crearAVL(void);
+NodoArb *crearNodoAVL(Artista *art);
 
 Song *crearCancion( char* nombre,  char* id, int popularidad, long duracion_ms);
 
@@ -78,4 +82,21 @@ NodoArb*InsertArtista(NodoArb *raiz, Artista *artista);
 void BorrarArbol(NodoArb *raiz);
 
 NodoArb *cargarDatos(const char *directorio);
+
+int contarCanciones(NodoArb *raiz);
+
+Song *CancionId(NodoArb *raiz, char *id);
+
+Song *seleccionarCancion(Artista *artista, int numDisco, int numCancion);
+
+void ImprimirArtistas(NodoArb *raiz);
+
+void Catalogo(NodoArb *raiz);
+
+int ObtenerReproducciones(NodoArb *raiz, const char *track_id);
+
+int ReproduccionesTotales(NodoArb *raiz);
+
+void MaximaReproduccion(NodoArb *raiz, char *nom_out, char *art_out, int *max_out);
+
 #endif

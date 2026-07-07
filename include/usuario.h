@@ -2,14 +2,19 @@
 #define USUARIO_H
 
 #include "hash.h"
+#include "avl.h"
 #include "utils.h"
+#include "grafo.h"
+#include "reproductor.h"
+#include <unistd.h> //exclusivamente para la contraseña secreta
 
-void LlenarTabla(TABLE_HASH *TH, char *usersArch);
 
 char *generarSalt();
 
-void Registrar(TABLE_HASH *TH,char *archrespaldo,char *nombre,char *pass);
+Usuario *login(TABLE_HASH *TH, char *nombre,char *pass);
 
-Usuario *login(TABLE_HASH *TH, char *nombre,char *pass,char *arch);
+int Registrar(TABLE_HASH *TH,char *nombre,char *pass);
 
+void MenuUser(Usuario *usuario, NodoArb *raiz, Grafo *grafo);
+void MenuAdmin(Usuario *admin, TABLE_HASH *TH, NodoArb *raiz, Grafo *grafo);
 #endif

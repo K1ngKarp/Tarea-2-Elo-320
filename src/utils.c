@@ -1,4 +1,9 @@
 #include "utils.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <math.h>
 
 char *concatenar(char *char1, char *char2){
     
@@ -30,20 +35,8 @@ int LargoArchivo(char *archlec){
     return large;
 }
 
-int esprimo(int numero){
-    
-    if(numero<2) return 0;
-    if(numero<4) return 1;
-    if(numero%2==0) return 0;
-    
-    for (int i = 2; i <= sqrt(numero); i++){
-        if (numero % i == 0) return 0;
-    }
-    return 1;
-}
-
 //funcion auxiliar proporcionada por Grok
-static int siguiente_primo(int n) {
+int siguiente_primo(int n) {
     // Simple: retorna un primo >= n (ajusta según necesidad)
     if (n < 2) return 2;
     int primo = n | 1; // impar

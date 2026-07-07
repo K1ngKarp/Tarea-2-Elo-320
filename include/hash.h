@@ -2,6 +2,11 @@
 #define HASH_H
 
 #include "avl.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <math.h>
 
 typedef struct Historial
 {
@@ -35,14 +40,16 @@ TABLE_HASH *crear(int tamano);
 
 unsigned long key(char *llave);
 
-unsigned long h(char *key,int tamanoTH);
+unsigned long h(unsigned long key,int tamanoTH);
 
-void insertarTH(TABLE_HASH *TH, char *nombre,char *pass, char *salt, char *tipo);
+void insertarTH(TABLE_HASH *TH, char *nombre,char *pass, char *salt,char *tipo);
 
 void LiberarTabla(TABLE_HASH *TH);
 
-void imprimirTH(TABLE_HASH *TH);
-
 unsigned int buscarNomb(TABLE_HASH *TH,char *nombre);
+
+TABLE_HASH *CargarTabla(char *ruta);
+
+void GuardarTabla(TABLE_HASH *TH, char *ruta);
 
 #endif

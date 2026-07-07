@@ -1,11 +1,10 @@
 CC = gcc
 
-CFLAGS = -Wall -g -Iinclude
 CFLAGS = -Wall -g -Iinclude -std=c99
 
 LDFLAGS = -lm
 
-TARGET = VibeNodes
+TARGET = VibeNode
 
 SRC_DIR = src
 
@@ -14,10 +13,8 @@ SRCS = $(SRC_DIR)/main.c \
        $(SRC_DIR)/grafo.c \
        $(SRC_DIR)/hash.c \
        $(SRC_DIR)/reproductor.c \
-       $(SRC_DIR)/historial.c \
        $(SRC_DIR)/usuario.c \
        $(SRC_DIR)/utils.c \
-
 
 OBJS = $(SRCS:.c=.o)
 all: $(TARGET)
