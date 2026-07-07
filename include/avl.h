@@ -4,60 +4,78 @@
 
 #include "utils.h"
 
-typedef struct
+typedef struct Song
 {
     char cancion_name[256];
+    char album_name[256];
     int popularidad;
-    int duracion;
+    int duracion_ms;
     char Id[256];
+    unsigned int reproducciones;
+    struct Song *siguiente;
+    struct Song *anterior;
 
 }Song;
 
-typedef struct album
-{
-    char album_name[60];
-    int visitas;
-    int cantidadcanciones;
-    int slots;   
-    
-    //lista de canciones
-    Song *cancion;
-}Discos;
+typedef struct Disco {
+    char nombre_disco[256];
+    Song* canciones;
+    struct Disco *siguiente;
+    struct Disco *anterior;
+} Disco;
 
+typedef struct Artista {
+    char nombre[100];
+    Disco* discos;
+    int popularidad;
+} Artista;
 
 typedef struct AVL{
 
-    char NombreArt[150];
-    int altura;
-    int cantidaddiscos;
-    int slotsdisc;
-    
-    Discos *discs;
-
+    Artista *artista;
     struct AVL *derecha;
     struct AVL *izquierda;
-}Artistas;
 
-Artistas *crearArtista(char *art);
-void insertSong(Discos *disc,char *cancion,char *popularidad,char *duracion,char *Id);
+    int altura;
+}NodoArb;
 
-void insertardiscos(Artistas *art,char *disc,char *cancion,char *popularidad,char *duracion,char *Id);
+int altura(NodoArb *arbol);
+void actualizarAltura(NodoArb *nodo);
+int equilibrio(NodoArb *raiz);
 
-Artistas *buscarArtista(Artistas *raiz, char *nombre);
-
-int altura(Artistas *arbol);
-
-int equilibrio(Artistas *raiz);
-
-Artistas *RotarDer(Artistas *raiz);
-
-Artistas *RotarIz(Artistas *raiz);
-
-Artistas *insertArt(Artistas *art, char *nombre);
-
-void BorrarAVL(Artistas *raiz);
-
-Artistas *llenarArb(char *catalogo);
+NodoArb *RotarDer(NodoArb *y);
+NodoArb *RotarIz(NodoArb *x);
 
 
+NodoArb *crearAVL(void);
+
+Song *crearCancion( char* nombre,  char* id, int popularidad, long duracion_ms);
+
+void BorrarCancion(Song *cancion);
+
+Disco *CrearDisco(char *nombre);
+
+void insertCancion(Disco *disc, Song *cancion);
+
+Song *BuscarCancion(Disco *disc, char *cancion);
+
+void BorrarDisco(Disco *disc);
+
+void mostrarDiscografia(Artista *artista);
+
+Artista *CrearArtista(char *nombre);
+
+
+void insertardiscos(Artista *art, Disco *album) ;
+
+Disco *BuscarDisco(Artista *art, char *disc);
+Artista *BuscarArtista(NodoArb *raiz, char *artista);
+
+NodoArb*InsertArtista(NodoArb *raiz, Artista *artista);
+
+//Arboles
+
+void BorrarArbol(NodoArb *raiz);
+
+NodoArb *cargarDatos(const char *directorio);
 #endif

@@ -42,13 +42,18 @@ int esprimo(int numero){
     return 1;
 }
 
-int PrimoMayorQue(int numero) {
-    int candidato = numero + 1;
+//funcion auxiliar proporcionada por Grok
+static int siguiente_primo(int n) {
+    // Simple: retorna un primo >= n (ajusta según necesidad)
+    if (n < 2) return 2;
+    int primo = n | 1; // impar
     while (1) {
-        if (esprimo(candidato)!=0) {
-            return candidato;
+        int es_primo = 1;
+        for (int i = 3; i * i <= primo; i += 2) {
+            if (primo % i == 0) { es_primo = 0; break; }
         }
-        candidato++;
+        if (es_primo) return primo;
+        primo += 2;
     }
 }
 

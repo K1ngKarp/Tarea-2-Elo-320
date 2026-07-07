@@ -1,11 +1,5 @@
 #include "hash.h"
 
-int tamanoIni(int cantidad){
-    int p=ceil(log(cantidad/0.65)/log(2));
-    return 2^(p+1); //tamaño sera una potencia de 2 cuyo factor de carga sea el menor posible.
-}
-
-
 TABLE_HASH *crear(int tamano) {
     TABLE_HASH *TH = malloc(sizeof(TABLE_HASH));
     
@@ -14,109 +8,71 @@ TABLE_HASH *crear(int tamano) {
 
     TH->cantidadUsers=0;
     TH->capacidad=tamano;
-    TH->tabla=malloc(sizeof(slot)*tamano);
+    TH->tabla=(Usuario**)calloc(tamano,sizeof(Usuario*));
 
-    for (int i = 0; i < tamano; i++){
-        
-        TH->tabla[i].cabeza=NULL;
-        TH->tabla[i].cont=0;
-        
-    }
     return TH;
 }
 
-unsigned int key(char *llave){
-    unsigned int large=strlen(llave);
-    unsigned long int valor=0;
-    
-    for (unsigned int i = 0; i < large; i++)
+//funcion hash que grok recomendo pues no supe que funcion podria ser util para este caso.
+unsigned long key(char *str){
+    unsigned long hash = 5381;
+    int c;
+
+    while ((c = *str++))
     {
-        valor=valor*(31)+llave[i]*(i+1);
+        hash = ((hash << 5) + hash) + c;   // hash = hash*33 + c
     }
-    return valor;
+    return hash;
 }
 
-unsigned int h(char *llave,int tamanoTH){
+unsigned long h(unsigned long llave,int tamanoTH){
     
-    int clave=key(llave);
-
-    return clave%tamanoTH;
+    return llave%tamanoTH;
 
 }
 
-int SlotLibre(TABLE_HASH *TH ,int indx){
-    int retorno; 
-    for (unsigned int i = 1; i < TH->capacidad; i++)
-    {
-        if (i==0){
-            retorno=indx;
-            if (TH->tabla[retorno].cont<2)  return retorno;
+
+void insertarTH(TABLE_HASH *TH, char *nombre,char *pass, char *salt, char *tipo){
+   if (TH == NULL || nombre == NULL || pass == NULL || tipo == NULL||salt==NULL) 
+        return;
+
+    unsigned int idx = key(nombre);
+    
+    for (int i = 0; i < TH->capacidad; i++) {
+        int index = h(idx + i,TH->capacidad);
+
+        // Si la casilla está vacía
+        if (TH->tabla[index] == NULL) {
+            Usuario *nuevo = malloc(sizeof(Usuario));
+            if (nuevo == NULL) return;
+
+            char *conct=concatenar(salt,pass);
+            strncpy(nuevo->nombre, nombre, 99);
+            nuevo->nombre[99] = '\0';
+
+            strncpy(nuevo->pass, conct, 99);
+            nuevo->pass[99] = '\0';
+
+            strncpy(nuevo->tipo, tipo, 9);
+            nuevo->tipo[9] = '\0';
+
+            strncpy(nuevo->salt,salt,5);
+            nuevo->salt[5]='\0';
             
+            nuevo->historialUser=NULL;
+
+            TH->tabla[index] = nuevo;
+            TH->cantidadUsers++;
+            free(conct);
+            return;
         }
-        
-        retorno=(indx+(i*i))%TH->capacidad;
-
-        if (TH->tabla[retorno].cont<2){
-            
-            return retorno;
-        }
-        
-    }
-    return TH->capacidad+1; //esto es si la tabla esta llena cosa que es imposible con las condiciones dadas
-    
-}
-
-
-void insertarTH(TABLE_HASH *TH, char *nombre,char *pass, char *salt){
-    if (TH == NULL || nombre == NULL || pass == NULL || salt == NULL)
-    return;
-
-    Usuario *user=malloc(sizeof(Usuario));
-    
-    if (user==NULL)
-    return;
-    
-    char *conct=concatenar(salt,pass);
-    strcpy(user->nombre,nombre);
-    strcpy(user->pass,conct);
-    strcpy(user->salt,salt);
-    user->sgte=NULL;
-
-    unsigned int idx = h(nombre,TH->capacidad);
-
-    
-
-    switch (TH->tabla[idx].cont){
-
-    case 0:
-        TH->tabla[idx].cabeza=user;
-        TH->tabla[idx].cont=1;
-        break;
-
-    case 1:
-        TH->tabla[idx].cabeza->sgte=user;
-        TH->tabla[idx].cont++;
-        break;
-
-    default:
-
-        int libre=SlotLibre(TH,idx);
-        
-        switch (TH->tabla[libre].cont){
-            case 0:
-                TH->tabla[libre].cabeza=user;
-                TH->tabla[libre].cont=1;
-                break;
-            case 1:
-                TH->tabla[libre].cabeza->sgte=user;
-                TH->tabla[libre].cont++;
-                break;
-
-        break;
+        // Si ya existe el usuario
+        else if (strcmp(TH->tabla[index]->nombre, nombre) == 0) {
+            printf("El nombre de usuario ya existe.\n");
+            return;
         }
     }
-    free(conct);
-    TH->cantidadUsers++;
+    printf("Tabla hash llena.\n");
 }
 
 
@@ -124,27 +80,12 @@ void LiberarTabla(TABLE_HASH *TH){
 
     if(TH==NULL) return;
 
-    Usuario *indice;
-    Usuario *ant;
     for (int i = 0; i < TH->capacidad; i++){
-
-        indice=TH->tabla[i].cabeza;
-            
-        while (indice!=NULL)
-        {
-            ant=indice;
-            indice=indice->sgte;
-            free(ant);
-        }
-
-        TH->tabla[i].cabeza=NULL;
-        TH->tabla[i].cont=0;
-        
+        if (TH->tabla[i]!=NULL)    free(TH->tabla[i]);
+   
     }
-    TH->cantidadUsers=0;
-    TH->capacidad=0;
+    free(TH->tabla);
     free(TH);
-       
 }
 
 
@@ -157,26 +98,19 @@ void imprimirTH(TABLE_HASH *TH){
     Usuario *rec;
     for (int i = 0; i < TH->capacidad; i++)
     {
-        if(TH->tabla[i].cabeza==NULL){
-           // printf("slot %d vacio\n",(i+1));
-           // printf("\n");
+        if(TH->tabla[i]==NULL){
+
 
         }else{
-            rec=TH->tabla[i].cabeza;
+            rec=TH->tabla[i];
             printf("slot N°: %d \n",(i+1));
             
+            printf("nombre: %s \n",rec->nombre);
+            printf("Pass: %s \n",rec->pass);
+            printf("salt: %s \n",rec->salt);
+            printf("\n");
 
-            while (rec!=NULL)
-            {
-                printf("nombre: %s \n",rec->nombre);
-                printf("Pass: %s \n",rec->pass);
-                printf("salt: %s \n",rec->salt);
-                printf("\n");
-                printf("slot N°: %d \n",(i+1));
-                printf("cantidad de nodos: %d \n",TH->tabla[i].cont);
-                rec=rec->sgte;
-            }
-            
+
         }
     }
     
@@ -184,26 +118,99 @@ void imprimirTH(TABLE_HASH *TH){
 
 unsigned int buscarNomb(TABLE_HASH *TH,char *nombre){
 
-    unsigned int idx = h(nombre,TH->capacidad);
-    unsigned int retorno;
+    unsigned long idx = key(nombre);
+    unsigned long retorno;
 
-    for (unsigned int i = 0; i < TH->capacidad; i++)
+    for (int i = 0; i < TH->capacidad; i++)
     {
-        if (i==0){
-            retorno=idx;
+        unsigned long index =h(idx+i,TH->capacidad);
 
-            if (strcmp(TH->tabla[retorno].cabeza->nombre,nombre)==0)        return retorno;
-            
-            if(strcmp(TH->tabla[retorno].cabeza->sgte->nombre,nombre)==0)   return retorno;
-        }else{
-        
-            retorno=(idx+(i*i))%TH->capacidad;
-
-            if (strcmp(TH->tabla[retorno].cabeza->nombre,nombre)==0)        return retorno;
-            if (strcmp(TH->tabla[retorno].cabeza->sgte->nombre,nombre)==0)  return retorno;
+        if (TH->tabla[index] != NULL)
+        {
+            if (strcmp(TH->tabla[index]->nombre, nombre) == 0){
+                retorno=index;
+                return retorno;
+            }
 
         }
     }
-    return TH->capacidad+1;
+    return TH->capacidad+1; //representa que no se encuentra el nombre.
 }
+//TABLE_HASH *TH=CargarTabla(char *ruta);
+TABLE_HASH *CargarTabla(char *ruta){
+    char rutaHashed[256];
+    char rutaArchivo[256];
+    snprintf(rutaHashed, sizeof(rutaHashed), "%susuarios_hashed.csv", ruta);
+    snprintf(rutaArchivo, sizeof(rutaArchivo), "%susuarios_100.csv", ruta);
 
+    int flag=1;
+    int largo;
+    FILE *archivo = fopen(rutaHashed, "r");
+
+    if (archivo == NULL){
+        archivo=fopen(rutaArchivo,"r");
+        if (archivo)
+        {
+            printf("Error: archivo de usuarios.\n");
+            return NULL;
+        }
+        flag=0;
+        largo=siguiente_primo((LargoArchivo(rutaArchivo)-1)*3);    
+    
+    } else{
+        largo=siguiente_primo((LargoArchivo(rutaHashed)-1)*3);
+    }
+
+    TABLE_HASH *TH=crear(largo);
+    if (TH==NULL){
+        fclose(archivo);
+        return NULL;
+    }
+    char Buff[360];
+    while (fgets(Buff,sizeof(360),archivo)!=NULL){
+        if (Buff[0]== '\n' ||Buff[0]=='\0'||Buff[0]=='#'){
+            
+        }else{
+            Buff[strcspn(Buff,"\n")]='\0';
+            if (flag==1){
+                char nombre[100], hash_pass[100],salt[6];
+                int seguro=sscanf(Buff,"%99[;];%99[;];%5s",nombre,hash_pass,salt,"user");
+                if (seguro<4){
+                    continue;
+                }
+                salt[strcspn(salt,"\n")]='\0';
+
+                unsigned long index=key(nombre);
+                for (int i = 0; i < largo; i++){
+                    unsigned long indice=h(index+1,largo);
+
+                    if (TH->tabla[indice]==NULL){
+                        insertarTH(TH,nombre,hash_pass,salt,"user");
+
+                        break;
+                    }
+                }
+
+            }else{ //username;password_plana;salt
+                char nombre[100], hash_pass[100],salt[6];
+                int seguro=sscanf(Buff,"%99[;];%99[;];%5[;]",nombre,hash_pass,salt);
+                
+                if (seguro<4){
+                    continue;
+                }
+                salt[strcspn(salt,"\n")]='\0';
+
+                unsigned long index=key(nombre);
+                for (int i = 0; i < largo; i++){
+                    unsigned long indice=h(index+1,largo);
+
+                    if (TH->tabla[indice]==NULL){
+                        insertarTH(TH,nombre,hash_pass,salt,"user");
+
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,44 +1,43 @@
 #ifndef HASH_H
 #define HASH_H
 
-#include "utils.h"
+#include "avl.h"
 
+typedef struct Historial
+{
+    Song *cancion;
+    char timestamp[30];
+    struct Historial *siguiente;
+} Historial;
 
-#define LARGE_KEY 12011
 
 typedef struct User {
-    char nombre[120];    
+    
+    char nombre[100];    
     char pass[100];
-    char salt[20];
+    char salt[6];
+    char tipo[10]; //user o admin
 
-    //sera un hashing abierto, pero sertan maximo 2 nodos por lista para evitar complejidad
-    struct User *sgte;
+    Historial *historialUser;
+
 }Usuario;
-
-typedef struct{
-    Usuario *cabeza;
-    int cont;
-}slot;
 
 
 //tabla hash
 typedef struct{
-    slot *tabla;
+    Usuario **tabla;
     unsigned int capacidad; 
     unsigned int cantidadUsers;
-    char respaldo[256];
 }TABLE_HASH;
 //
 
 TABLE_HASH *crear(int tamano);
 
-unsigned int key(char *llave);
+unsigned long key(char *llave);
 
-unsigned int h(char *key,int tamanoTH);
+unsigned long h(char *key,int tamanoTH);
 
-int SlotLibre(TABLE_HASH *TH,int indx);
-
-void insertarTH(TABLE_HASH *TH, char *nombre,char *pass, char *salt);
+void insertarTH(TABLE_HASH *TH, char *nombre,char *pass, char *salt, char *tipo);
 
 void LiberarTabla(TABLE_HASH *TH);
 

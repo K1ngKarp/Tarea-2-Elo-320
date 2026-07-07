@@ -58,9 +58,9 @@ int main(int argc, char *argv[]){
             while (flag==1){
             
                 printf("Ingrese nombre de usuario: ");
-                sncanf(" %s",nombre);
+                sncanf("%s",nombre);
 
-                pass= getpass("Ingrese contraseña: ");
+                pass=getpass("Ingrese contraseña: ");
 
                 Usuario *user=login(TH,nombre,pass,ruta);
                 if (user!=NULL){
