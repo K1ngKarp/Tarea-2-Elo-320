@@ -25,43 +25,52 @@ char *generarSalt(){
 
 Usuario *login(TABLE_HASH *TH, char *nombre,char *pass){
 
-    int index=key(nombre);
+    unsigned long index=key(nombre);
+
     for(int i=0;i<TH->capacidad;i++){
         unsigned long indice=h(index+i,TH->capacidad);
-        if (TH->tabla[indice]!=NULL){
-            if (strcmp(TH->tabla[indice]->nombre,nombre)==0){
-                char *concat=concatenar(TH->tabla[indice]->pass,pass);
-                if(strcmp(concat,TH->tabla[indice]->pass)==0){
-                    return TH->tabla[indice];
-                }
-            }else{
-                return NULL;
+        Usuario *user=TH->tabla[indice];
+
+        if (user == NULL) continue;
+
+        if (strcmp(user->nombre, nombre) == 0) {
+            char *concat = concatenar(user->salt, pass);
+            if (concat == NULL) return NULL;
+
+            if (strcmp(concat, user->pass) == 0) {
+                free(concat);
+                return user;
             }
-        }
+
+            free(concat);
+            return NULL;  
+        }   
     }
-    
     return NULL;
 }
 
-int Registrar(TABLE_HASH *TH,char *nombre,char *pass){
-    
-    if (TH->capacidad==TH->cantidadUsers){
-        printf("Tabla llena");
-        return -1;
-    }
-    
-    Usuario *nuevo=login(TH,nombre,pass);
-    if (nuevo!=NULL){
-        return -1;
-    }
-    
-    char *salt=generarSalt();
-    
-    char *a=concatenar(salt,pass);
-    
-    insertarTH(TH,nombre,a,salt,"usuario");
+int Registrar(TABLE_HASH *TH, char *nombre, char *pass)
+{
+    if (TH == NULL || nombre == NULL || pass == NULL) return -1;
 
-    free(a);
+    // Verificar si ya existe
+    if (login(TH, nombre, pass) != NULL) {
+        printf("El usuario ya existe.\n");
+        return -1;
+    }
+
+    char *salt = generarSalt();
+    if (salt == NULL) return -1;
+
+    char *pass_hash = concatenar(salt, pass);
+    if (pass_hash == NULL) {
+        free(salt);
+        return -1;
+    }
+
+    insertarTH(TH, nombre, pass_hash, salt, "user");
+
+    free(pass_hash);
     free(salt);
     return 0;
 }

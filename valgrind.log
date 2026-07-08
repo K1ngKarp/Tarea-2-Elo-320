@@ -1,0 +1,627 @@
+==336767== Memcheck, a memory error detector
+==336767== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==336767== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==336767== Command: ./vibenodes -lista -user data/
+==336767== Parent PID: 4238
+==336767== 
+==336767== Invalid read of size 4
+==336767==    at 0x10D1B9: GuardarTabla (hash.c:251)
+==336767==    by 0x10DC0C: main (main.c:171)
+==336767==  Address 0xdc is not stack'd, malloc'd or (recently) free'd
+==336767== 
+==336767== 
+==336767== Process terminating with default action of signal 11 (SIGSEGV)
+==336767==  Access not within mapped region at address 0xDC
+==336767==    at 0x10D1B9: GuardarTabla (hash.c:251)
+==336767==    by 0x10DC0C: main (main.c:171)
+==336767==  If you believe this happened as a result of a stack
+==336767==  overflow in your program's main thread (unlikely but
+==336767==  possible), you can try to increase the size of the
+==336767==  main thread stack using the --main-stacksize= flag.
+==336767==  The main thread stack size used in this run was 8388608.
+==336767== 
+==336767== HEAP SUMMARY:
+==336767==     in use at exit: 168,496 bytes in 3,429 blocks
+==336767==   total heap usage: 3,441 allocs, 12 frees, 195,904 bytes allocated
+==336767== 
+==336767== 16 bytes in 1 blocks are still reachable in loss record 1 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10C680: crear (hash.c:14)
+==336767==    by 0x10CED5: cargarTH (hash.c:194)
+==336767==    by 0x10D5EB: main (main.c:67)
+==336767== 
+==336767== 16 bytes in 1 blocks are still reachable in loss record 2 of 59
+==336767==    at 0x484D953: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10C6C8: crear (hash.c:23)
+==336767==    by 0x10CED5: cargarTH (hash.c:194)
+==336767==    by 0x10D5EB: main (main.c:67)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 3 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 4 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 5 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 6 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 7 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 8 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 9 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 10 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 11 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 12 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 13 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 14 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 15 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 16 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 17 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 18 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 19 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 20 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 21 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 22 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 23 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 24 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 25 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 26 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 27 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 28 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 29 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 30 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 31 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 32 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 33 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 34 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 35 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 32 bytes in 1 blocks are still reachable in loss record 36 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 40 bytes in 1 blocks are still reachable in loss record 37 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10A7B6: crear_grafo (grafo.c:10)
+==336767==    by 0x10ADCE: cargar_grafo (grafo.c:128)
+==336767==    by 0x10D550: main (main.c:61)
+==336767== 
+==336767== 64 bytes in 2 blocks are still reachable in loss record 38 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 64 bytes in 2 blocks are still reachable in loss record 39 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 64 bytes in 2 blocks are still reachable in loss record 40 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 64 bytes in 2 blocks are still reachable in loss record 41 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 64 bytes in 2 blocks are still reachable in loss record 42 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 64 bytes in 2 blocks are still reachable in loss record 43 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 64 bytes in 2 blocks are still reachable in loss record 44 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 64 bytes in 2 blocks are still reachable in loss record 45 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10967E: crearNodoAVL (avl.c:67)
+==336767==    by 0x109B53: InsertArtista (avl.c:210)
+==336767==    by 0x109BB8: InsertArtista (avl.c:219)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x109B91: InsertArtista (avl.c:216)
+==336767==    by 0x10A0B9: cargarDatos (avl.c:360)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 448 bytes in 1 blocks are still reachable in loss record 46 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10A86B: crear_grafo (grafo.c:30)
+==336767==    by 0x10ADCE: cargar_grafo (grafo.c:128)
+==336767==    by 0x10D550: main (main.c:61)
+==336767== 
+==336767== 472 bytes in 1 blocks are still reachable in loss record 47 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x49CEE7E: __fopen_internal (iofopen.c:65)
+==336767==    by 0x49CEE7E: fopen@@GLIBC_2.2.5 (iofopen.c:86)
+==336767==    by 0x10D144: GuardarTabla (hash.c:240)
+==336767==    by 0x10DC0C: main (main.c:171)
+==336767== 
+==336767== 1,024 bytes in 1 blocks are still reachable in loss record 48 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x49CE1B4: _IO_file_doallocate (filedoalloc.c:101)
+==336767==    by 0x49DE523: _IO_doallocbuf (genops.c:347)
+==336767==    by 0x49DBF8F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:745)
+==336767==    by 0x49DCAAE: _IO_new_file_xsputn (fileops.c:1244)
+==336767==    by 0x49DCAAE: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1197)
+==336767==    by 0x49D0C5C: puts (ioputs.c:40)
+==336767==    by 0x10D44D: main (main.c:41)
+==336767== 
+==336767== 1,024 bytes in 1 blocks are still reachable in loss record 49 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x49CE1B4: _IO_file_doallocate (filedoalloc.c:101)
+==336767==    by 0x49DE523: _IO_doallocbuf (genops.c:347)
+==336767==    by 0x49DB883: _IO_file_underflow@@GLIBC_2.2.5 (fileops.c:486)
+==336767==    by 0x49DE5D1: _IO_default_uflow (genops.c:362)
+==336767==    by 0x49B51C3: __vfscanf_internal (vfscanf-internal.c:676)
+==336767==    by 0x49A8EC5: __isoc99_scanf (isoc99_scanf.c:30)
+==336767==    by 0x10D9AB: main (main.c:125)
+==336767== 
+==336767== 4,096 bytes in 1 blocks are still reachable in loss record 50 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x49CE1B4: _IO_file_doallocate (filedoalloc.c:101)
+==336767==    by 0x49DE523: _IO_doallocbuf (genops.c:347)
+==336767==    by 0x49DBF8F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:745)
+==336767==    by 0x49DCAAE: _IO_new_file_xsputn (fileops.c:1244)
+==336767==    by 0x49DCAAE: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1197)
+==336767==    by 0x49CFA11: fwrite (iofwrite.c:39)
+==336767==    by 0x10D18C: GuardarTabla (hash.c:247)
+==336767==    by 0x10DC0C: main (main.c:171)
+==336767== 
+==336767== 6,000 bytes in 50 blocks are still reachable in loss record 51 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x109ADD: CrearArtista (avl.c:196)
+==336767==    by 0x10A08B: cargarDatos (avl.c:357)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 12,320 bytes in 44 blocks are indirectly lost in loss record 52 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x1097DD: CrearDisco (avl.c:105)
+==336767==    by 0x10A0F9: cargarDatos (avl.c:367)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 14,560 bytes in 52 blocks are still reachable in loss record 53 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x1097DD: CrearDisco (avl.c:105)
+==336767==    by 0x10A0F9: cargarDatos (avl.c:367)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 17,920 bytes in 1 blocks are still reachable in loss record 54 of 59
+==336767==    at 0x484D953: calloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10A7DF: crear_grafo (grafo.c:15)
+==336767==    by 0x10ADCE: cargar_grafo (grafo.c:128)
+==336767==    by 0x10D550: main (main.c:61)
+==336767== 
+==336767== 23,936 bytes in 44 blocks are indirectly lost in loss record 55 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x1096DB: crearCancion (avl.c:77)
+==336767==    by 0x10A148: cargarDatos (avl.c:374)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 24,640 bytes in 1,540 blocks are still reachable in loss record 56 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10A94E: agregar_arista (grafo.c:50)
+==336767==    by 0x10B3D1: cargar_grafo (grafo.c:215)
+==336767==    by 0x10D550: main (main.c:61)
+==336767== 
+==336767== 24,640 bytes in 1,540 blocks are still reachable in loss record 57 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x10A9AF: agregar_arista (grafo.c:57)
+==336767==    by 0x10B3D1: cargar_grafo (grafo.c:215)
+==336767==    by 0x10D550: main (main.c:61)
+==336767== 
+==336767== 30,464 bytes in 56 blocks are still reachable in loss record 58 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x1096DB: crearCancion (avl.c:77)
+==336767==    by 0x10A148: cargarDatos (avl.c:374)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== 41,536 (5,280 direct, 36,256 indirect) bytes in 44 blocks are definitely lost in loss record 59 of 59
+==336767==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==336767==    by 0x109ADD: CrearArtista (avl.c:196)
+==336767==    by 0x10A08B: cargarDatos (avl.c:357)
+==336767==    by 0x10D486: main (main.c:48)
+==336767== 
+==336767== LEAK SUMMARY:
+==336767==    definitely lost: 5,280 bytes in 44 blocks
+==336767==    indirectly lost: 36,256 bytes in 88 blocks
+==336767==      possibly lost: 0 bytes in 0 blocks
+==336767==    still reachable: 126,960 bytes in 3,297 blocks
+==336767==         suppressed: 0 bytes in 0 blocks
+==336767== 
+==336767== For lists of detected and suppressed errors, rerun with: -s
+==336767== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)

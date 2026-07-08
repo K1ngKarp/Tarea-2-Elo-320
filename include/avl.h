@@ -15,7 +15,7 @@ typedef struct Song
     int popularidad;
     int duracion_ms;
     char Id[256];
-    unsigned int reproducciones;
+    int reproducciones;
     struct Song *siguiente;
     struct Song *anterior;
 

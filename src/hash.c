@@ -6,17 +6,30 @@
 #include <math.h>
 
 TABLE_HASH *crear(int tamano) {
-    TABLE_HASH *TH = malloc(sizeof(TABLE_HASH));
-    
-    if (TH==NULL)
+    if (tamano <= 0) {
+        printf("Error: Tamaño de tabla inválido.\n");
         return NULL;
+    }
 
-    TH->cantidadUsers=0;
-    TH->capacidad=tamano;
-    TH->tabla=(Usuario**)calloc(tamano,sizeof(Usuario*));
+    TABLE_HASH *TH = (TABLE_HASH *)malloc(sizeof(TABLE_HASH));
+    if (TH == NULL) {
+        printf("Error: No se pudo asignar memoria para TABLE_HASH.\n");
+        return NULL;
+    }
+
+    TH->cantidadUsers = 0;
+    TH->capacidad = tamano;
+
+    TH->tabla = (Usuario**)calloc(tamano, sizeof(Usuario*));
+    if (TH->tabla == NULL) {
+        printf("Error: No se pudo asignar memoria para la tabla de usuarios.\n");
+        free(TH);
+        return NULL;
+    }
 
     return TH;
 }
+
 
 //funcion hash que grok recomendo pues no supe que funcion podria ser util para este caso.
 unsigned long key(char *str){
@@ -41,17 +54,25 @@ void insertarTH(TABLE_HASH *TH, char *nombre,char *pass, char *salt, char *tipo)
    if (TH == NULL || nombre == NULL || pass == NULL || tipo == NULL||salt==NULL) 
         return;
 
-    unsigned int idx = key(nombre);
+    unsigned long idx = key(nombre);
     
     for (int i = 0; i < TH->capacidad; i++) {
-        int index = h(idx + i,TH->capacidad);
+        int index = (idx + i)%TH->capacidad;
 
-        // Si la casilla está vacía
+
         if (TH->tabla[index] == NULL) {
+            
             Usuario *nuevo = malloc(sizeof(Usuario));
-            if (nuevo == NULL) return;
+            
+            if (nuevo == NULL) 
+                return;
 
             char *conct=concatenar(salt,pass);
+            if(conct==NULL){
+                free(nuevo);
+                return;
+            }
+
             strncpy(nuevo->nombre, nombre, 99);
             nuevo->nombre[99] = '\0';
 
@@ -64,10 +85,14 @@ void insertarTH(TABLE_HASH *TH, char *nombre,char *pass, char *salt, char *tipo)
             strncpy(nuevo->salt,salt,5);
             nuevo->salt[5]='\0';
             
+            nuevo->clavehash=index;
+
             nuevo->historialUser=NULL;
 
+            TH->tabla[index]->enuso=1;
             TH->tabla[index] = nuevo;
             TH->cantidadUsers++;
+            
             free(conct);
             return;
         }
@@ -93,6 +118,7 @@ void LiberarTabla(TABLE_HASH *TH){
     free(TH);
 }
 
+
 unsigned int buscarNomb(TABLE_HASH *TH,char *nombre){
 
     unsigned long idx = key(nombre);
@@ -113,99 +139,126 @@ unsigned int buscarNomb(TABLE_HASH *TH,char *nombre){
     }
     return TH->capacidad+1; //representa que no se encuentra el nombre.
 }
+void guardar_usuarios_hashed(TABLE_HASH *TH, char *directorio)
+{
+    char ruta[256];
+    snprintf(ruta, sizeof(ruta), "%susuarios_hashed.csv", directorio);
 
+    FILE *f = fopen(ruta, "w");
+    if (f == NULL) return;
+
+    fprintf(f, "# username;password_hash;salt;rol\n");
+
+    for (int i = 0; i < TH->capacidad; i++) {
+        if (TH->tabla[i] != NULL && TH->tabla[i]->enuso) {
+            fprintf(f, "%s;%s;%s;%s\n",
+                    TH->tabla[i]->nombre,
+                    TH->tabla[i]->pass,
+                    TH->tabla[i]->salt,
+                    TH->tabla[i]->tipo);
+        }
+    }
+    fclose(f);
+    printf("Archivo usuarios_hashed.csv generado.\n");
+}
 
 //TABLE_HASH *TH=CargarTabla(char *ruta);
-TABLE_HASH *CargarTabla(char *ruta){
-    char rutaHashed[256];
-    char rutaArchivo[256];
-    snprintf(rutaHashed, sizeof(rutaHashed), "%susuarios_hashed.csv", ruta);
-    snprintf(rutaArchivo, sizeof(rutaArchivo), "%susuarios_100.csv", ruta);
+TABLE_HASH *cargarTH(char *directorio)
+{
+    char ruta_hashed[256], ruta_plana[256];
 
-    int flag=1; //para saber si estamos cargando de la base de usuarios o de los guardados
-    int largo;
-    FILE *archivo = fopen(rutaHashed, "r");
+    snprintf(ruta_hashed, sizeof(ruta_hashed), "%susuarios_hashed.csv", directorio);
+    snprintf(ruta_plana, sizeof(ruta_plana), "%susuarios_100.csv", directorio);
 
-    if (archivo == NULL){
-        archivo=fopen(rutaArchivo,"r");
-        if (archivo)
-        {
-            printf("Error: archivo de usuarios.\n");
+    FILE *f = fopen(ruta_hashed, "r");
+    int desde_hashed = (f != NULL);
+
+    if (!desde_hashed) {
+        f = fopen(ruta_plana, "r");
+        if (f == NULL) {
+            printf("Error: no se encontró ningún archivo de usuarios.\n");
             return NULL;
         }
-        flag=0;
-        largo=siguiente_primo((LargoArchivo(rutaArchivo)-1)*3);    
-    
-    } else{
-        largo=siguiente_primo((LargoArchivo(rutaHashed)-1)*3);
     }
 
-    TABLE_HASH *TH=crear(largo);
-    if (TH==NULL){
-        fclose(archivo);
+    // Contar usuarios
+    int n = 0;
+    char linea[300];
+    while (fgets(linea, sizeof(linea), f)) {
+        if (linea[0] != '#' && linea[0] != '\n')
+            n++;
+    }
+    rewind(f);
+
+    int tam = siguiente_primo(n * 2);
+    TABLE_HASH *TH = crear(tam);        
+    if (TH == NULL) {
+        fclose(f);
         return NULL;
     }
-    char Buff[360];
-    while (fgets(Buff,sizeof(360),archivo)!=NULL){
-        if (Buff[0]== '\n' ||Buff[0]=='\0'||Buff[0]=='#'){
-            
-        }else{
-            Buff[strcspn(Buff,"\n")]='\0';
-            if (flag==1){
-                char nombre[100], hash_pass[100],salt[6],tipo[10];
-                int seguro=sscanf(Buff,"%99[^;];%99[^;];%5[^;];%s",nombre,hash_pass,salt,tipo);
-                if (seguro<4){
-                    continue;
-                }
-                tipo[strcspn(tipo,"\n")]='\0';
 
-                unsigned long index=key(nombre);
-                for (int i = 0; i < largo; i++){
-                    unsigned long indice=h(index+1,largo);
+    while (fgets(linea, sizeof(linea), f)) {
+        if (linea[0] == '#' || linea[0] == '\n') continue;
 
-                    if (TH->tabla[indice]==NULL){
-                        insertarTH(TH,nombre,hash_pass,salt,tipo);
+        linea[strcspn(linea, "\n")] = '\0';
 
-                        break;
-                    }
-                }
+        char nombre[100];
+        char campo2[100];
+        char salt[10];
+        char tipo[10];
 
-            }else{ //username;password_plano;salt
-                
-                char nombre[100], pass[100],salt[6],tipo[10];
-                sscanf(Buff,"%99[^;];%99[^;];%s",nombre,pass,salt);
-                salt[strcspn(salt,"\n")]='\0';
-
-                char *pass_hash=concatenar(salt,pass);
-
-                unsigned long index=key(nombre);
-                for (int i = 0; i < largo; i++){
-                    unsigned long indice=h(index+1,largo);
-
-                    if (TH->tabla[indice]==NULL){
-                        insertarTH(TH,nombre,pass_hash,salt,tipo);
-                        break;
-                    }
-                }
-            }
+        if (desde_hashed) {
+            // username;hash;salt;tipo
+            sscanf(linea, "%99[^;];%99[^;];%5[^;];%s", nombre, campo2, salt, tipo);
+            salt[4]='\0';
+            tipo[strcspn(tipo,"\n")]='\0';
+            printf("ayuda1\n");
+            insertarTH(TH, nombre, campo2, salt,tipo);
+        } 
+        else {
+            // username;password;salt
+            sscanf(linea, "%99[^;];%99[^;];%s", nombre, campo2, salt);
+            printf("ayuda2\n");
+            insertarTH(TH, nombre, campo2, salt, "user");
         }
     }
+
+    fclose(f);
+
+    if (!desde_hashed) {
+        guardar_usuarios_hashed(TH, directorio);
+    }
+
     return TH;
 }
 
 void GuardarTabla(TABLE_HASH *TH, char *ruta){
-    char rutaHashed[256];
-    snprintf(rutaHashed, sizeof(rutaHashed), "%susuarios_hashed.csv", ruta);
-    FILE *arch=fopen(rutaHashed,"w");
-    if(arch==NULL) return;
+    
+    char arch[256];
+    snprintf(arch, sizeof(arch), "%susuarios_hashed.csv", ruta);
 
-    fprintf(arch,"# username;password_hash;salt;rol");
-    for(int i=0;i<TH->capacidad;i++){
-        if (TH->tabla[i]==NULL){
-            fprintf(arch,"%s;%s;%s;%s\n",TH->tabla[i]->nombre,TH->tabla[i]->pass,TH->tabla[i]->salt,TH->tabla[i]->tipo);
+    FILE *f = fopen(arch, "w");
+    if (f == NULL)
+    {
+        printf("Error al guardar usuarios_hashed.csv\n");
+        return;
+    }
+
+    fprintf(f, "# username;password_hash;salt;rol\n");
+
+    for (int i = 0; i < TH->capacidad; i++)
+    {
+        if (TH->tabla[i]->enuso == 1)
+        {
+            fprintf(f, "%s;%s;%s;%s\n",
+                    TH->tabla[i]->nombre,
+                    TH->tabla[i]->pass,
+                    TH->tabla[i]->salt,
+                    TH->tabla[i]->tipo);
         }
     }
 
-    fclose(arch);
+    fclose(f);
+    printf("Usuarios guardados correctamente.\n");
 }
 

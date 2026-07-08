@@ -68,7 +68,7 @@ NodoArb *crearNodoAVL(Artista *art){
     arbol->artista=art;
     arbol->derecha = NULL;
     arbol->izquierda = NULL;
-    arbol->altura = 0;
+    arbol->altura = 1;
     return arbol;
    
 }
@@ -80,14 +80,18 @@ Song *crearCancion( char* nombre,  char* id, int popularidad, long duracion_ms){
         printf("error al guardar memoria de Song.\n");
         return NULL;
     }
-    strncpy(cancion->cancion_name,nombre,254);
-    cancion->cancion_name[255]='\0';
-    strncpy(cancion->Id,id,254);
+
+    strncpy(cancion->cancion_name, nombre, 254);
+    cancion->cancion_name[255] = '\0';
+    strncpy(cancion->Id, id, 49);
+    cancion->Id[49] = '\0';
+
     cancion->popularidad = popularidad;
     cancion->duracion_ms = duracion_ms;
     cancion->reproducciones = 0;
     cancion->siguiente = NULL;
-    cancion->anterior=NULL;
+    cancion->anterior = NULL;
+
     return cancion;
 }
 void BorrarCancion(Song *cancion){
@@ -200,6 +204,51 @@ Artista *CrearArtista(char *nombre){
     return art;
 }
 
+NodoArb* InsertArtista(NodoArb *raiz, Artista *artista){
+
+    if (raiz == NULL) {
+        return crearNodoAVL(artista);
+    }
+
+    int cmp = strcmp(artista->nombre, raiz->artista->nombre);
+
+    if (cmp < 0) {
+        raiz->izquierda = InsertArtista(raiz->izquierda, artista);
+    }
+    else if (cmp > 0) {
+        raiz->derecha = InsertArtista(raiz->derecha, artista);
+    }
+    else {
+        return raiz;
+    }
+
+
+    actualizarAltura(raiz);
+    int balance = equilibrio(raiz);
+
+    // Caso Izquierda-Izquierda
+    if (balance > 1 && strcmp(artista->nombre, raiz->izquierda->artista->nombre) < 0)
+        return RotarDer(raiz);
+
+    // Caso Derecha-Derecha
+    if (balance < -1 && strcmp(artista->nombre, raiz->derecha->artista->nombre) > 0)
+        return RotarIz(raiz);
+
+    // Caso Izquierda-Derecha
+    if (balance > 1 && strcmp(artista->nombre, raiz->izquierda->artista->nombre) > 0) {
+        raiz->izquierda = RotarIz(raiz->izquierda);
+        return RotarDer(raiz);
+    }
+
+    // Caso Derecha-Izquierda
+    if (balance < -1 && strcmp(artista->nombre, raiz->derecha->artista->nombre) < 0) {
+        raiz->derecha = RotarDer(raiz->derecha);
+        return RotarIz(raiz);
+    }
+
+    return raiz;
+}
+
 void insertardiscos(Artista *art, Disco *album) {
 
     if (art==NULL||album==NULL)
@@ -246,60 +295,6 @@ Artista *BuscarArtista(NodoArb *raiz, char *artista){
     
 }
 
-NodoArb*InsertArtista(NodoArb *raiz, Artista *artista){
-    if (raiz == NULL){
-        crearNodoAVL(artista);
-    }   
-    int orden=ordenalf(artista->nombre, raiz->artista->nombre);
-
-    if (orden < 0)
-    {
-        raiz->izquierda = InsertArtista(raiz->izquierda, artista);
-    }
-    else if (orden > 0)
-    {
-        raiz->derecha = InsertArtista(raiz->derecha, artista);
-    }
-    else
-    {
-        return raiz;
-    }
-
-    actualizarAltura(raiz);
-
-    int balance = altura(raiz->izquierda) - altura(raiz->derecha);
-
-    // rotación izquierda izquierda
-    if (balance > 1 && strcmp(artista->nombre, raiz->izquierda->artista->nombre) < 0)
-    {
-        return RotarDer(raiz);
-    }
-
-    // rotación derecha derecha
-    if (balance < -1 && strcmp(artista->nombre, raiz->derecha->artista->nombre) > 0)
-    {
-        return RotarIz(raiz);
-    }
-
-    // rtación izquierda derecha
-    if (balance > 1 && strcmp(artista->nombre, raiz->izquierda->artista->nombre) > 0)
-    {
-        raiz->izquierda = RotarIz(raiz->izquierda);
-        return RotarDer(raiz);
-    }
-
-    // rotación derecha izquierda
-    if (balance < -1 && strcmp(artista->nombre, raiz->derecha->artista->nombre) < 0)
-    {
-        raiz->derecha = RotarDer(raiz->derecha);
-        return RotarIz(raiz);
-    }
-
-    return raiz;
-}
-
-
-
 void BorrarArbol(NodoArb *raiz) {
     if (raiz==NULL)
         return;
@@ -321,50 +316,70 @@ void BorrarArbol(NodoArb *raiz) {
 }
 
 
+
+
 NodoArb *cargarDatos(const char *directorio)
 {
-    char rutaArchivo[256];
-
-    snprintf(rutaArchivo, sizeof(rutaArchivo), "%scatalogo_1000.csv", directorio); //para temas practicos usaremos el catalogo de 1000
+   char rutaArchivo[256];
+    snprintf(rutaArchivo, sizeof(rutaArchivo), "%scatalogo_100.csv", directorio);
 
     FILE *archivo = fopen(rutaArchivo, "r");
     if (archivo == NULL)
     {
-        printf("Error al abrir catalogo_1000.csv\n");
+        printf("Error al abrir %s\n", rutaArchivo);
         return NULL;
     }
 
     NodoArb *raiz = NULL;
-    char Buffer[512];
+    char linea[512];
 
-    while (fgets(Buffer, sizeof(Buffer), archivo))
+    while (fgets(linea, sizeof(linea), archivo))
     {
-        if (Buffer[0] == '#' || Buffer[0] == '\n'){
+        if (linea[0] == '#' || linea[0] == '\n')
+            continue;
 
-        }else{
-            Buffer[strcspn(Buffer, "\n")] = '\0';
+        linea[strcspn(linea, "\n")] = '\0';
 
-            char nombreArtista[100], nombreDisco[100], nombreCancion[100], Id[50];
-            int popularidad, duracion;
+        char nombreArtista[100];
+        char nombreDisco[100];
+        char nombreCancion[100];
+        char Id[50];
+        int popularidad = 0, duracion = 0;
 
-            sscanf(Buffer, "%99[^;];%99[^;];%99[^;];%d;%d;%49s", 
-                nombreArtista, nombreDisco, nombreCancion, &popularidad, &duracion, Id);
+        sscanf(linea, "%99[^;];%99[^;];%99[^;];%d;%d;%49s",
+               nombreArtista, nombreDisco, nombreCancion, 
+               &popularidad, &duracion, Id);
 
-            Artista *artista = BuscarArtista(raiz, nombreArtista);
-            if (artista == NULL)
-            {
-                artista = CrearArtista(nombreArtista);
-                if (artista == NULL)
-                    continue;
-                raiz = InsertArtista(raiz,artista);
-            }
-            Disco *disc=BuscarDisco(artista,nombreDisco);
-            Song *cancion= crearCancion(nombreCancion,Id,popularidad,duracion);
-            insertCancion(disc,cancion);
+        // Buscar o crear Artista
+        Artista *artista = BuscarArtista(raiz, nombreArtista);
+        if (artista == NULL)
+        {
+            artista = CrearArtista(nombreArtista);
+            if (artista == NULL) continue;
+
+            raiz = InsertArtista(raiz, artista); 
+        }
+
+        // Buscar o crear Disco
+        Disco *disco = BuscarDisco(artista, nombreDisco);
+        if (disco == NULL)
+        {
+            disco = CrearDisco(nombreDisco);
+            if (disco == NULL) continue;
+
+            insertardiscos(artista, disco); 
+        }
+
+        // Crear y agregar Canción
+        Song *cancion = crearCancion(nombreCancion, Id, popularidad, duracion);
+        if (cancion != NULL)
+        {
+            insertCancion(disco, cancion);
         }
     }
 
     fclose(archivo);
+    printf("Catálogo cargado correctamente.\n");
     return raiz;
 }
 

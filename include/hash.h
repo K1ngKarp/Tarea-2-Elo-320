@@ -20,8 +20,10 @@ typedef struct User {
     
     char nombre[100];    
     char pass[100];
-    char salt[6];
+    char salt[10];
     char tipo[10]; //user o admin
+    int enuso;
+    unsigned long clavehash;
 
     Historial *historialUser;
 
@@ -31,8 +33,8 @@ typedef struct User {
 //tabla hash
 typedef struct{
     Usuario **tabla;
-    unsigned int capacidad; 
-    unsigned int cantidadUsers;
+    int capacidad; 
+    int cantidadUsers;
 }TABLE_HASH;
 //
 
@@ -48,7 +50,9 @@ void LiberarTabla(TABLE_HASH *TH);
 
 unsigned int buscarNomb(TABLE_HASH *TH,char *nombre);
 
-TABLE_HASH *CargarTabla(char *ruta);
+void guardar_usuarios_hashed(TABLE_HASH *TH, char *directorio);
+
+TABLE_HASH *cargarTH(char *ruta);
 
 void GuardarTabla(TABLE_HASH *TH, char *ruta);
 

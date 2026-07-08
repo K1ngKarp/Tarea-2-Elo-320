@@ -7,11 +7,10 @@
 
 char *concatenar(char *char1, char *char2){
     
-    int largo= strlen(char1)+strlen(char2)+1;
-    char *concat=malloc(sizeof(char)*largo);
-   
-    concat[0]='\0';
-    strcat(concat,char1);
+    char *concat=malloc(strlen(char1)+strlen(char2)+1);
+    if (concat == NULL) return NULL;
+
+    strcpy(concat,char1);
     strcat(concat,char2);
 
     return concat;
